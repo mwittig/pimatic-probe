@@ -35,7 +35,6 @@
   ],
   "configSchema": "probe-config-schema.coffee",
   "dependencies": {
-    "node-probe": ">=0.0.1"
   },
   "peerDependencies": {
     "pimatic": ">0.8.19"
