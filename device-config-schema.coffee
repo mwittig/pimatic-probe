@@ -11,10 +11,34 @@ module.exports = {
       enableResponseTime:
         description: "Adds an attribute to monitor response times"
         type: "boolean"
-        default: 60
+        default: false
       interval:
         description: "Polling interval for HTTP/HTTPS probes in seconds"
         type: "number"
         default: 60
+  },
+  TcpConnectProbe: {
+    title: "TCP Connect Probe"
+    description: "Provides a probe for a TCP connect to the given host and port"
+    type: "object"
+    properties:
+      host:
+        description: "Hostname or IP address of the server"
+        type: "string"
+      port:
+        description: "Server port"
+        type: "number"
+      enableConnectTime:
+        description: "Adds an attribute to monitor connect times"
+        type: "boolean"
+        default: false
+      interval:
+        description: "Polling interval for TCP connect probes in seconds"
+        type: "number"
+        default: 60
+      timeout:
+        description: "Timeout (in seconds) of inactivity on the TCP socket"
+        type: "number"
+        default: 10
   }
 }

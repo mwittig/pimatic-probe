@@ -1,8 +1,8 @@
 # pimatic-probe
 
-A pimatic plugin to probe HTTP(S), TCP or UDP services
+A pimatic plugin to probe HTTP(S), TCP and UDP services.
 
-NOTE: Currently, this a basic implementation of the HTTP(S) probe is provided, only!
+Note: UDP is currently not supported and will be added at later stage!
 
 ## Configuration
 
@@ -17,10 +17,13 @@ purposes you may set property `debug` to true. This will write additional debug 
 Then you need to add a device in the `devices` section. Currently, only the following device type is supported:
 
 * HttpProbe: This type provides a probe for pinging HTTP/HTTPS services
-  
-As part of the device definition you need to provide the `url` for the Web Service to be pinged. If the property
+* TcpConnectProbe: This type provides a probe for TCP connect
+
+### HttpProbe Configuration
+
+As part of the device definition you need to provide the `url` for the Web Service to be probed. If the property
 `enableResponseTime` is set to true (false by default) the device will additionally expose a `responseTime` attribute,
- which allows for monitoring the response times over time. You may also set the `interval` property for the probing 
+ which allows for monitoring the response times. You may also set the `interval` property for the probing 
  interval in seconds (60 seconds by default). **Warning Notice: Generally, it is not advised to ping external services 
  at a high frequency as this may be regarded as a denial-of-service attack!**
 
@@ -32,6 +35,25 @@ As part of the device definition you need to provide the `url` for the Web Servi
           "enableResponseTime": false
           "interval": 60
     }
+    
+### TcpConnectProbe Configuration
+
+As part of the device definition you need to provide the `host` and `port`for the TCP Service to be probed. If the 
+ property `enableConnectTime` is set to true (false by default) the device will additionally expose a `connectTime` 
+ attribute, which allows for monitoring the connection establishment times. You may also set the `interval` property 
+ for the probing interval in seconds (60 seconds by default). The `timeout` property may be set the timeout in 
+ seconds (10 seconds by default) for inactivity on the TCP socket.
+ 
+    {
+          "id": "probe2",
+          "class": "TcpConnectProbe",
+          "name": "Call Monitor",
+          "host": "fritz.box",
+          "port": 1012,
+          "enableConnectTime": false,
+          "interval": 10,
+          "timeout": 10
+    }
 
 ## History
 
@@ -40,4 +62,8 @@ As part of the device definition you need to provide the `url` for the Web Servi
 * 20150419, V0.0.2
     * Fixed HTTP request termination to make sure HTTP connection gets closed right away
     * Added optional ``responseTime`` attribute
+    * Updated README   
+* 20150420, V0.0.3
+    * Added TcpConnectProbe
+    * Corrected definition of the responseTime attribute of HttpProbe
     * Updated README

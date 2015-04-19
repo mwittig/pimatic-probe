@@ -1,6 +1,6 @@
 {
   "name": "pimatic-probe",
-  "description": "A pimatic plugin to probe HTTP(S), TCP or UDP services",
+  "description": "A pimatic plugin to probe HTTP(S), TCP and UDP services",
   "author": {
     "name": "Marcus Wittig",
     "url": "https://github.com/mwittig/pimatic-probe"
@@ -13,7 +13,7 @@
     "device-config-schema.coffee",
     "LICENSE"
   ],
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/mwittig/pimatic-probe",
   "keywords": [
     "pimatic",
