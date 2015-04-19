@@ -22,7 +22,7 @@ As part of the device definition you need to provide the `url` for the Web Servi
 `enableResponseTime` is set to true (false by default) the device will additionally expose a `responseTime` attribute,
  which allows for monitoring the response times over time. You may also set the `interval` property for the probing 
  interval in seconds (60 seconds by default). **Warning Notice: Generally, it is not advised to ping external services 
- at a high frequency as this may be regarded as denial of service attempt!**
+ at a high frequency as this may be regarded as a denial-of-service attack!**
 
     {
           "id": "probel",
@@ -38,6 +38,6 @@ As part of the device definition you need to provide the `url` for the Web Servi
 * 20150419, V0.0.1
     * Initial Version
 * 20150419, V0.0.2
-    * Fixed HTTP request termination to make sure HTTP connection gets closed right away.
+    * Fixed HTTP request termination to make sure HTTP connection gets closed right away
     * Added optional ``responseTime`` attribute
     * Updated README
