@@ -76,7 +76,7 @@ module.exports = (env) ->
 
     _ping: ->
       return new Promise( (resolve, reject) =>
-        pingRequest = @service.get(@options, (response) =>
+        @service.get(@options, (response) =>
           env.logger.debug "Got response: " + response.statusCode if @debug
           resolve()
         ).on "error", (error) =>

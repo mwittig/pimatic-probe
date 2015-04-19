@@ -4,13 +4,12 @@ module.exports = {
     title: "HTTP/HTTPS Probe"
     description: "Provides a probe for pinging HTTP/HTTPS services"
     type: "object"
-    extensions: ["xConfirm"]
     properties:
       url:
-        description: "URL to be pinged"
+        description: "HTTP/HTTPS Service URL to be probed"
         type: "string"
       interval:
-        description: "Polling interval for HTTP probes in seconds"
+        description: "Polling interval for HTTP/HTTPS probes in seconds"
         type: "number"
         default: 60
   }
