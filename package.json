@@ -1,0 +1,47 @@
+{
+  "name": "pimatic-probe",
+  "description": "A pimatic plugin to probe HTTP(S), TCP or UDP services",
+  "author": {
+    "name": "Marcus Wittig",
+    "url": "https://github.com/mwittig/pimatic-probe"
+  },
+  "main": "probe",
+  "files": [
+    "probe.coffee",
+    "README.md",
+    "probe-config-schema.coffee",
+    "device-config-schema.coffee",
+    "LICENSE"
+  ],
+  "version": "0.0.1",
+  "homepage": "https://github.com/mwittig/pimatic-probe",
+  "keywords": [
+    "pimatic",
+    "http-ping",
+    "ping"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mwittig/pimatic-probe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mwittig/pimatic-probe/issues"
+  },
+  "licenses": [
+    {
+      "type": "GPLv2",
+      "url": "https://github.com/mwittig/pimatic-probe/blob/master/LICENSE"
+    }
+  ],
+  "configSchema": "probe-config-schema.coffee",
+  "dependencies": {
+    "node-probe": ">=0.0.1"
+  },
+  "peerDependencies": {
+    "pimatic": ">0.8.19"
+  },
+  "engines": {
+    "node": ">0.8.x",
+    "npm": ">1.1.x"
+  }
+}
