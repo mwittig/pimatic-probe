@@ -21,24 +21,33 @@ module.exports = (env) ->
 
       @framework.deviceManager.registerDeviceClass("HttpProbe", {
         configDef: deviceConfigDef.HttpProbe,
-        createCallback: (config, plugin, lastState) =>
-          return new HttpProbeDevice(config, @, lastState)
+        createCallback: (config, plugin, @framework, lastState) =>
+          return new HttpProbeDevice(config, @, @framework, lastState)
       })
 
 
   class HttpProbeDevice extends env.devices.PresenceSensor
     # Initialize device by reading entity definition from middleware
-    constructor: (@config, plugin, lastState) ->
+    constructor: (@config, plugin, @framework, lastState) ->
       @debug = plugin.config.debug;
       env.logger.debug("ProbeBaseDevice Initialization") if @debug
       @id = config.id
       @name = config.name
+      @responseTime = lastState?.responseTime?.value or 0
       @_presence = lastState?.presence?.value or false
+      @_options = url.parse(config.url, false, true)
+      @_service =  if @_options.protocol is 'https' then https else http
 
-      @options = url.parse(config.url, false, true)
-      @service =  if @options.protocol is 'https' then https else http
+      if config.enableResponseTime
+        @addAttribute('responseTime', {
+          description: "Topic Data",
+          type: "number"
+          acronym: "RTT"
+          unit: "ms"
+        })
+        @['getResponseTime'] = ()-> Promise.resolve(@responseTime)
 
-      if !@options.hostname?
+      if !@_options.hostname?
         env.logger.error("URL must contain a hostname")
         @deviceConfigurationError = true;
 
@@ -76,18 +85,27 @@ module.exports = (env) ->
 
     _ping: ->
       return new Promise( (resolve, reject) =>
-        @service.get(@options, (response) =>
-          env.logger.debug "Got response: " + response.statusCode if @debug
-          resolve()
-        ).on "error", (error) =>
+        start = Date.now()
+        request = @_service.get(@_options, (response) =>
+          @_setResponseTime(Number Date.now() - start)
+          env.logger.debug "Got response status=" + response.statusCode + ", time=" + @responseTime + "ms" if @debug
+          request.abort()
+          resolve(@responseTime)
+        ).on "error", ((error) =>
+          request.abort()
           reject(error)
+        )
+        request.setNoDelay()
       )
 
+    _setResponseTime: (value) ->
+      if @responseTime isnt value
+        @responseTime = value
+        @emit "responseTime", value if @config.enableResponseTime
+
     getPresence: ->
-      if @_presence? then return Promise.resolve @_presence
-      return new Promise( (resolve, reject) =>
-        @once('presence', ( (state) -> resolve state ) )
-      ).timeout(@config.timeout + 5*60*1000)
+      @_presence = false if @_presence?
+      return Promise.resolve @_presence
 
   # ###Finally
   # Create a instance of my plugin
