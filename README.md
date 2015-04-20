@@ -2,7 +2,7 @@
 
 A pimatic plugin to probe HTTP(S), TCP and UDP services.
 
-Note: UDP is currently not supported and will be added at later stage!
+Note: UDP is currently not supported and will be added at a later stage!
 
 ## Configuration
 
@@ -23,7 +23,7 @@ Then you need to add a device in the `devices` section. Currently, only the foll
 
 As part of the device definition you need to provide the `url` for the Web Service to be probed. If the property
 `enableResponseTime` is set to true (false by default) the device will additionally expose a `responseTime` attribute,
- which allows for monitoring the response times. You may also set the `interval` property for the probing 
+ which allows for monitoring the response times. You may also set the `interval` property to specify the probing 
  interval in seconds (60 seconds by default). **Warning Notice: Generally, it is not advised to ping external services 
  at a high frequency as this may be regarded as a denial-of-service attack!**
 
@@ -41,8 +41,8 @@ As part of the device definition you need to provide the `url` for the Web Servi
 As part of the device definition you need to provide the `host` and `port`for the TCP Service to be probed. If the 
  property `enableConnectTime` is set to true (false by default) the device will additionally expose a `connectTime` 
  attribute, which allows for monitoring the connection establishment times. You may also set the `interval` property 
- for the probing interval in seconds (60 seconds by default). The `timeout` property may be set the timeout in 
- seconds (10 seconds by default) for inactivity on the TCP socket.
+ to specify the probing interval in seconds (60 seconds by default). The `timeout` property may be set to specify
+ the idle timeout on the TCP socket in seconds (10 seconds by default).
  
     {
           "id": "probe2",
