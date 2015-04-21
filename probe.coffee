@@ -4,6 +4,7 @@ module.exports = (env) ->
 
   # Require the bluebird promise library
   Promise = env.require 'bluebird'
+  _ = env.require 'lodash'
 
   # Require the nodejs net API
   net = require 'net'
@@ -12,6 +13,7 @@ module.exports = (env) ->
   url = require 'url'
   http = require 'http'
   https = require 'https'
+  redirect = require 'follow-redirects'
 
   # ###ProbePlugin class
   class ProbePlugin extends env.plugins.Plugin
@@ -22,20 +24,20 @@ module.exports = (env) ->
 
       @framework.deviceManager.registerDeviceClass("HttpProbe", {
         configDef: deviceConfigDef.HttpProbe,
-        createCallback: (config, plugin, @framework, lastState) =>
-          return new HttpProbeDevice(config, @, @framework, lastState)
+        createCallback: (config, plugin, lastState) =>
+          return new HttpProbeDevice(config, @, lastState)
       })
 
       @framework.deviceManager.registerDeviceClass("TcpConnectProbe", {
         configDef: deviceConfigDef.TcpConnectProbe,
-        createCallback: (config, plugin, @framework, lastState) =>
-          return new TcpConnectProbeDevice(config, @, @framework, lastState)
+        createCallback: (config, plugin, lastState) =>
+          return new TcpConnectProbeDevice(config, @, lastState)
       })
 
 
   class HttpProbeDevice extends env.devices.PresenceSensor
     # Initialize device by reading entity definition from middleware
-    constructor: (@config, plugin, @framework, lastState) ->
+    constructor: (@config, plugin, lastState) ->
       @debug = plugin.config.debug
       env.logger.debug("HttpProbeDevice Initialization") if @debug
       @id = config.id
@@ -43,7 +45,16 @@ module.exports = (env) ->
       @responseTime = lastState?.responseTime?.value or 0
       @_presence = lastState?.presence?.value or false
       @_options = url.parse(config.url, false, true)
-      @_service = if @_options.protocol is 'https' then https else http
+
+      if config.maxRedirects > 0
+        @_options.maxRedirects = config.maxRedirects
+        @_service = if @_options.protocol is 'https' then redirect.https else redirect.http
+      else
+        @_service = if @_options.protocol is 'https' then https else http
+
+      @acceptedStatusCodes = if _.isArray(config.acceptedStatusCodes) then config.acceptedStatusCodes else []
+      if config.username isnt "" and config.password isnt ""
+        @_options.auth = config.username + ':' + config.password
 
       if config.enableResponseTime
         @addAttribute('responseTime', {
@@ -99,7 +110,11 @@ module.exports = (env) ->
           @_setResponseTime(Number time.toFixed())
           env.logger.debug "Got response , device id=" + @id + ", status=" + response.statusCode + ", time=" + @responseTime + " ms" if @debug
           request.abort()
-          resolve(@responseTime)
+          if 0 in @acceptedStatusCodes or response.statusCode in @acceptedStatusCodes
+            resolve(@responseTime)
+          else
+            reject(new Error "HTTP status code " + response.statusCode + " does not match accepted status codes "\
+              + @acceptedStatusCodes.toString())
         ).on "error", ((error) =>
           request.abort()
           reject(error)
@@ -119,7 +134,7 @@ module.exports = (env) ->
 
   class TcpConnectProbeDevice extends env.devices.PresenceSensor
     # Initialize device by reading entity definition from middleware
-    constructor: (@config, plugin, @framework, lastState) ->
+    constructor: (@config, plugin, lastState) ->
       @debug = plugin.config.debug
       env.logger.debug("TcpConnectProbeDevice Initialization") if @debug
       @id = config.id
@@ -141,9 +156,9 @@ module.exports = (env) ->
       @interval = 1000 * config.interval
       super()
 
-      dns.lookup(config.host, null, (err, address, family) =>
-        if err?
-          env.logger.error "Name Lookup failed: " + error
+      dns.lookup(config.host, null, (error, address) =>
+        if error?
+          env.logger.error "Probe for device id=" + @id + ". host=" + config.host + ": Name Lookup failed: " + error
         else
           @_host = address
           @_scheduleUpdate()

@@ -16,6 +16,22 @@ module.exports = {
         description: "Polling interval for HTTP/HTTPS probes in seconds"
         type: "number"
         default: 60
+      acceptedStatusCodes:
+        description: "HTTP Status Codes regarded as a successful probe result (set 0 for 'Accept All')"
+        type: "array"
+        default: [0]
+      maxRedirects:
+        description: "Maximum number of HTTP redirects to follow automatically (set 0 to disable)"
+        type: "number"
+        default: 5
+      username:
+        description: "Username if HTTP Basic Authentication shall be applied"
+        type: "string"
+        default: ""
+      password:
+        description: "Password if HTTP Basic Authentication shall be applied"
+        type: "string"
+        default: ""
   },
   TcpConnectProbe: {
     title: "TCP Connect Probe"
