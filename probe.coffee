@@ -48,10 +48,11 @@ module.exports = (env) ->
 
       if config.maxRedirects > 0
         @_options.maxRedirects = config.maxRedirects
-        @_service = if @_options.protocol is 'https' then redirect.https else redirect.http
+        @_service = if @_options.protocol is 'https:' then redirect.https else redirect.http
       else
-        @_service = if @_options.protocol is 'https' then https else http
+        @_service = if @_options.protocol is 'https:' then https else http
 
+      @_options.rejectUnauthorized = false
       @acceptedStatusCodes = if _.isArray(config.acceptedStatusCodes) then config.acceptedStatusCodes else []
       if config.username isnt "" and config.password isnt ""
         @_options.auth = config.username + ':' + config.password

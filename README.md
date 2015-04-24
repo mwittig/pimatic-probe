@@ -139,3 +139,7 @@ As part of the device definition you need to provide the `host` and `port`for th
     * Added support for HTTP Basic Auth
     * Added support for defining the accepted HTTP Response Status Codes
     * Updated README, Added version badge
+* 20150424, V0.0.5
+    * Fixed bug: "Protocol:https: not supported"
+    * Fixed issue with web server using an untrusted certificate resulting in an "UNABLE_TO_VERIFY_LEAF_SIGNATURE" 
+      error. Untrusted cert will be accepted for now. This feature will be configurable with the next release.
