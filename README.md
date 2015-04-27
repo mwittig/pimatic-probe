@@ -145,3 +145,5 @@ As part of the device definition you need to provide the `host` and `port`for th
       error. Untrusted cert will be accepted for now. This feature will be configurable with the next release.
 * 20150427, V0.0.6
     * Reduced error log output. If "debug" is not set on the plugin, only new error states will be logged
+* 20150427, V0.0.7
+    * Fixed device config schema. Presence conditions should match properly as part of rules.

@@ -4,6 +4,7 @@ module.exports = {
     title: "HTTP/HTTPS Probe"
     description: "Provides a probe for pinging HTTP/HTTPS services"
     type: "object"
+    extensions: ["xLink", "xPresentLabel", "xAbsentLabel"]
     properties:
       url:
         description: "HTTP/HTTPS Service URL to be probed"
@@ -37,6 +38,7 @@ module.exports = {
     title: "TCP Connect Probe"
     description: "Provides a probe for a TCP connect to the given host and port"
     type: "object"
+    extensions: ["xLink", "xPresentLabel", "xAbsentLabel"]
     properties:
       host:
         description: "Hostname or IP address of the server"

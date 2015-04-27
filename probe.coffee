@@ -133,8 +133,7 @@ module.exports = (env) ->
         @emit "responseTime", value if @config.enableResponseTime
 
     getPresence: ->
-      @_presence = false if @_presence?
-      Promise.resolve(@_presence)
+     Promise.resolve(if @_presence? then @_presence else false)
 
 
   class TcpConnectProbeDevice extends env.devices.PresenceSensor
@@ -224,8 +223,8 @@ module.exports = (env) ->
         @emit "connectTime", value if @config.enableConnectTime
 
     getPresence: ->
-      @_presence = false if @_presence?
-      return Promise.resolve @_presence
+      Promise.resolve(if @_presence? then @_presence else false)
+
 
   # ###Finally
   # Create a instance of my plugin
