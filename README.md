@@ -143,3 +143,5 @@ As part of the device definition you need to provide the `host` and `port`for th
     * Fixed bug: "Protocol:https: not supported"
     * Fixed issue with web server using an untrusted certificate resulting in an "UNABLE_TO_VERIFY_LEAF_SIGNATURE" 
       error. Untrusted cert will be accepted for now. This feature will be configurable with the next release.
+* 20150427, V0.0.6
+    * Reduced error log output. If "debug" is not set on the plugin, only new error states will be logged

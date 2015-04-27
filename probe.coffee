@@ -45,6 +45,7 @@ module.exports = (env) ->
       @responseTime = lastState?.responseTime?.value or 0
       @_presence = lastState?.presence?.value or false
       @_options = url.parse(config.url, false, true)
+      @_lastError = ""
 
       if config.maxRedirects > 0
         @_options.maxRedirects = config.maxRedirects
@@ -96,9 +97,12 @@ module.exports = (env) ->
 
     _requestUpdate: ->
       @_ping().then(=>
+        @_lastError = ""
         @_setPresence (yes)
       ).catch((error) =>
-        env.logger.error "Probe for device id=" + @id + " failed: " + error
+        newError = "Probe for device id=" + @id + " failed: " + error
+        env.logger.error newError if @_lastError isnt newError or @debug
+        @_lastError = newError
         @_setPresence (no)
       )
 
@@ -186,7 +190,9 @@ module.exports = (env) ->
       @_connect().then(=>
         @_setPresence (yes)
       ).catch((error) =>
-        env.logger.error "Probe for device id=" + @id + ", host=" + @_host + ", port=" + @_port + " failed: " + error
+        newError = "Probe for device id=" + @id + ", host=" + @_host + ", port=" + @_port + " failed: " + error
+        env.logger.error newError if @_lastError isnt newError or @debug
+        @_lastError = newError
         @_setPresence (no)
       )
 
