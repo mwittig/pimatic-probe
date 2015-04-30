@@ -53,7 +53,7 @@ module.exports = (env) ->
       else
         @_service = if @_options.protocol is 'https:' then https else http
 
-      @_options.rejectUnauthorized = false
+      @_options.rejectUnauthorized = config.verifyPeerCert
       @acceptedStatusCodes = if _.isArray(config.acceptedStatusCodes) then config.acceptedStatusCodes else []
       if config.username isnt "" and config.password isnt ""
         @_options.auth = config.username + ':' + config.password

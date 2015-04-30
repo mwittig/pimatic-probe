@@ -4,11 +4,15 @@ module.exports = {
     title: "HTTP/HTTPS Probe"
     description: "Provides a probe for pinging HTTP/HTTPS services"
     type: "object"
-    extensions: ["xLink", "xPresentLabel", "xAbsentLabel"]
+    extensions: ["xLink", "xPresentLabel", "xAbsentLabel", "xAttributeOptions"]
     properties:
       url:
         description: "HTTP/HTTPS Service URL to be probed"
         type: "string"
+      verifyPeerCert:
+        description: "Enables or Disables verification verification of the peer certificates."
+        type: "boolean"
+        default: false
       enableResponseTime:
         description: "Adds an attribute to monitor response times"
         type: "boolean"
@@ -38,7 +42,7 @@ module.exports = {
     title: "TCP Connect Probe"
     description: "Provides a probe for a TCP connect to the given host and port"
     type: "object"
-    extensions: ["xLink", "xPresentLabel", "xAbsentLabel"]
+    extensions: ["xLink", "xPresentLabel", "xAbsentLabel", "xAttributeOptions"]
     properties:
       host:
         description: "Hostname or IP address of the server"
