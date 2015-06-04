@@ -71,7 +71,9 @@ module.exports = (env) ->
         env.logger.error("URL must contain a hostname")
         @deviceConfigurationError = true
 
-      @interval = 1000 * config.interval
+      @interval = Math.max 1000 * config.interval, 10000
+      @_options.timeout = Math.min @interval, 20000
+      @_options.agent = false
       super()
 
       if not @deviceConfigurationError
@@ -100,7 +102,7 @@ module.exports = (env) ->
         @_lastError = ""
         @_setPresence (yes)
       ).catch((error) =>
-        newError = "Probe for device id=" + @id + " failed: " + error
+        newError = "Probe for device id=#{@id} failed: " + error
         env.logger.error newError if @_lastError isnt newError or @debug
         @_lastError = newError
         @_setPresence (no)
@@ -109,18 +111,28 @@ module.exports = (env) ->
     _ping: ->
       return new Promise((resolve, reject) =>
         timeStart = process.hrtime()
+        timeoutOccurred = false
         request = @_service.get(@_options, (response) =>
           timeEnd = process.hrtime(timeStart)
           time = (timeEnd[0] * 1e9 + timeEnd[1]) / 1e6
           @_setResponseTime(Number time.toFixed())
-          env.logger.debug "Got response , device id=" + @id + ", status=" + response.statusCode + ", time=" + @responseTime + " ms" if @debug
+          #env.logger.debug "Got response, device id=#{@id}, status=#{response.statusCode}, time="\
+          #    + "#{@responseTime} ms" if @debug
           request.abort()
           if 0 in @acceptedStatusCodes or response.statusCode in @acceptedStatusCodes
             resolve(@responseTime)
           else
-            reject(new Error "HTTP status code " + response.statusCode + " does not match accepted status codes "\
-              + @acceptedStatusCodes.toString())
-        ).on "error", ((error) =>
+            reject(new Error "HTTP status code #{response.statusCode} does not match accepted status codes "\
+                + @acceptedStatusCodes.toString())
+        )
+        request.on "error", ((error) =>
+          if (timeoutOccurred)
+            error = new Error "Request timeout occurred - request aborted"
+          request.abort()
+          reject(error)
+        )
+        request.on "timeout", ((error) =>
+          timeoutOccurred = true
           request.abort()
           reject(error)
         )
@@ -133,7 +145,7 @@ module.exports = (env) ->
         @emit "responseTime", value if @config.enableResponseTime
 
     getPresence: ->
-     Promise.resolve(if @_presence? then @_presence else false)
+      Promise.resolve(if @_presence? then @_presence else false)
 
 
   class TcpConnectProbeDevice extends env.devices.PresenceSensor
@@ -146,7 +158,8 @@ module.exports = (env) ->
       @connectTime = lastState?.connectTime?.value or 0
       @_presence = lastState?.presence?.value or false
       @_port = config.port
-      @_timeout = config.timeout * 1000
+      @interval = Math.max 1000 * config.interval, 10000
+      @_timeout = Math.min @interval, config.timeout * 1000
 
       if config.enableConnectTime
         @addAttribute('connectTime', {
@@ -157,12 +170,11 @@ module.exports = (env) ->
         })
         @['getConnectTime'] = ()-> Promise.resolve(@connectTime)
 
-      @interval = 1000 * config.interval
       super()
 
       dns.lookup(config.host, null, (error, address) =>
         if error?
-          env.logger.error "Probe for device id=" + @id + ". host=" + config.host + ": Name Lookup failed: " + error
+          env.logger.error "Probe for device id=#{@id}. host=#{config.host}: Name Lookup failed: " + error
         else
           @_host = address
           @_scheduleUpdate()
@@ -189,7 +201,7 @@ module.exports = (env) ->
       @_connect().then(=>
         @_setPresence (yes)
       ).catch((error) =>
-        newError = "Probe for device id=" + @id + ", host=" + @_host + ", port=" + @_port + " failed: " + error
+        newError = "Probe for device id=#{@id}, host=#{@_host}, port=#{@_port} failed: " + error
         env.logger.error newError if @_lastError isnt newError or @debug
         @_lastError = newError
         @_setPresence (no)
@@ -212,7 +224,7 @@ module.exports = (env) ->
           time = (timeEnd[0] * 1e9 + timeEnd[1]) / 1e6
           @_setConnectTime(Number time.toFixed())
           client.destroy()
-          env.logger.debug "Connected to server, device id=" + @id + ", connectTime=" + @connectTime + " ms" if @debug
+          env.logger.debug "Connected to server, device id=#{@id}, connectTime=#{@connectTime} ms" if @debug
           resolve(@connectTime)
         )
       )

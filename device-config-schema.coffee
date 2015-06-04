@@ -18,7 +18,7 @@ module.exports = {
         type: "boolean"
         default: false
       interval:
-        description: "Polling interval for HTTP/HTTPS probes in seconds"
+        description: "Polling interval for HTTP/HTTPS probes in seconds (minimum interval is 10 secs)"
         type: "number"
         default: 60
       acceptedStatusCodes:
@@ -55,7 +55,7 @@ module.exports = {
         type: "boolean"
         default: false
       interval:
-        description: "Polling interval for TCP connect probes in seconds"
+        description: "Polling interval for TCP connect probes in seconds (minimum interval is 10 secs)"
         type: "number"
         default: 60
       timeout:

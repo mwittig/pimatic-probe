@@ -223,3 +223,7 @@ If you wish to hide the sparkline (the mini-graph) of `connectTime` attribute di
       (disabled by default). This is to replace the temporary fix for the "UNABLE_TO_VERIFY_LEAF_SIGNATURE" issue
       added in v0.0.5
     * Extended documentation of device configuration option
+* 20150604, V0.0.9
+    * Added range checks for interval property. Updated device schema
+    * Added HttpProbe & TcpProve socket timeouts. Adapt timeout to interval if interval is less than 20 secs
+    * Disabled HttpProbe socket pooling
