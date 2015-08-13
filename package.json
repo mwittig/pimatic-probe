@@ -18,7 +18,8 @@
   "keywords": [
     "pimatic",
     "http-ping",
-    "ping"
+    "ping",
+    "probe"
   ],
   "repository": {
     "type": "git",
@@ -27,15 +28,10 @@
   "bugs": {
     "url": "https://github.com/mwittig/pimatic-probe/issues"
   },
-  "licenses": [
-    {
-      "type": "GPLv2",
-      "url": "https://github.com/mwittig/pimatic-probe/blob/master/LICENSE"
-    }
-  ],
+  "license": "GPL-2.0",
   "configSchema": "probe-config-schema.coffee",
   "dependencies": {
-    "follow-redirects": ">=0.0.3"
+    "follow-redirects": ">=0.0.6"
   },
   "peerDependencies": {
     "pimatic": ">0.8.19"

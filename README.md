@@ -227,3 +227,7 @@ If you wish to hide the sparkline (the mini-graph) of `connectTime` attribute di
     * Added range checks for interval property. Updated device schema
     * Added HttpProbe & TcpProve socket timeouts. Adapt timeout to interval if interval is less than 20 secs
     * Disabled HttpProbe socket pooling
+* 20150813, V0.1.0
+    * Revised license information to provide a SPDX 2.0 license identifier according to npm v2.1 guidelines 
+      on license metadata - see also https://github.com/npm/npm/releases/tag/v2.10.0
+    * Dependency updates
