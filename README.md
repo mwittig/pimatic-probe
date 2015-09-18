@@ -231,3 +231,6 @@ If you wish to hide the sparkline (the mini-graph) of `connectTime` attribute di
     * Revised license information to provide a SPDX 2.0 license identifier according to npm v2.1 guidelines 
       on license metadata - see also https://github.com/npm/npm/releases/tag/v2.10.0
     * Dependency updates
+* 20150918, V0.1.1
+    * Dependency updates
+    * Minor changes
