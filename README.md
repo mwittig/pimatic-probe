@@ -2,9 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/pimatic-probe.svg)](http://badge.fury.io/js/pimatic-probe)
 
-A pimatic plugin to probe HTTP(S), TCP and UDP services.
-
-Note: UDP is currently not supported and will be added at a later stage!
+A pimatic plugin to probe HTTP(S) and TCP services.
 
 ## Configuration
 
@@ -92,7 +90,7 @@ By default, HttpProbe does not verify the server certificate if connected to a H
  enabled by setting the `verifyPeerCert` property to `true`. In this case, HttpProbe will fail (`absent` state) if the 
  server certificate cannot be verified.
 
- {
+    {
         "id": "probe4",
         "class": "HttpProbe",
         "name": "Router Web Page with Basic Auth",
@@ -233,4 +231,8 @@ If you wish to hide the sparkline (the mini-graph) of `connectTime` attribute di
     * Dependency updates
 * 20150918, V0.1.1
     * Dependency updates
+    * Minor changes
+* 20151116, V0.2.0
+    * Changed strategy for probe scheduling to ensure there is only one pending probe at a time to avoid 
+      resource exhaustion in edge cases, e.g. if there is no response from peer on HTTP connect.
     * Minor changes

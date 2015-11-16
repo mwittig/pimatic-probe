@@ -77,25 +77,23 @@ module.exports = (env) ->
       super()
 
       if not @deviceConfigurationError
-        @_scheduleUpdate()
+        # perform an update now
+        @_requestUpdate()
 
 
     # poll device according to interval
     _scheduleUpdate: () ->
-      if typeof @intervalObject isnt 'undefined'
-        clearInterval(=>
-          @intervalObject
-        )
+      if @timeoutObject?
+        clearTimeout @timeoutObject
 
-      # keep updating
       if @interval > 0
-        @intervalObject = setInterval(=>
+        # keep updating
+        @timeoutObject = setTimeout( =>
+          @timeoutObject = null
           @_requestUpdate()
         , @interval
         )
 
-      # perform an update now
-      @_requestUpdate()
 
     _requestUpdate: ->
       @_ping().then(=>
@@ -106,6 +104,8 @@ module.exports = (env) ->
         env.logger.error newError if @_lastError isnt newError or @debug
         @_lastError = newError
         @_setPresence (no)
+      ).finally( =>
+        @_scheduleUpdate()
       )
 
     _ping: ->
@@ -159,7 +159,7 @@ module.exports = (env) ->
       @_presence = lastState?.presence?.value or false
       @_port = config.port
       @interval = Math.max 1000 * config.interval, 10000
-      @_timeout = Math.min @interval, config.timeout * 1000
+      @_connectTimeout = Math.min @interval, config.timeout * 1000
 
       if config.enableConnectTime
         @addAttribute('connectTime', {
@@ -177,25 +177,23 @@ module.exports = (env) ->
           env.logger.error "Probe for device id=#{@id}. host=#{config.host}: Name Lookup failed: " + error
         else
           @_host = address
-          @_scheduleUpdate()
+          # perform an update now
+          @_requestUpdate()
       )
+
 
     # poll device according to interval
     _scheduleUpdate: () ->
-      if typeof @intervalObject isnt 'undefined'
-        clearInterval(=>
-          @intervalObject
-        )
+      if @timeoutObject?
+        clearTimeout @timeoutObject
 
-      # keep updating
       if @interval > 0
-        @intervalObject = setInterval(=>
+        # keep updating
+        @timeoutObject = setTimeout( =>
+          @timeoutObject = null
           @_requestUpdate()
         , @interval
         )
-
-      # perform an update now
-      @_requestUpdate()
 
     _requestUpdate: ->
       @_connect().then(=>
@@ -205,13 +203,15 @@ module.exports = (env) ->
         env.logger.error newError if @_lastError isnt newError or @debug
         @_lastError = newError
         @_setPresence (no)
+      ).finally( =>
+        @_scheduleUpdate()
       )
 
     _connect: ->
       return new Promise((resolve, reject) =>
         timeStart = process.hrtime()
         client = new net.Socket
-        client.setTimeout(@_timeout, =>
+        client.setTimeout(@_connectTimeout, =>
           client.destroy()
           reject(new Error "TCP connect attempt timed out")
         )
