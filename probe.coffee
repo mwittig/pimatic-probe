@@ -118,7 +118,7 @@ module.exports = (env) ->
           @_setResponseTime(Number time.toFixed())
           #env.logger.debug "Got response, device id=#{@id}, status=#{response.statusCode}, time="\
           #    + "#{@responseTime} ms" if @debug
-          request.abort()
+          response.socket.end();
           if 0 in @acceptedStatusCodes or response.statusCode in @acceptedStatusCodes
             resolve(@responseTime)
           else

@@ -236,3 +236,5 @@ If you wish to hide the sparkline (the mini-graph) of `connectTime` attribute di
     * Changed strategy for probe scheduling to ensure there is only one pending probe at a time to avoid 
       resource exhaustion in edge cases, e.g. if there is no response from peer on HTTP connect.
     * Minor changes
+* 20151121, V0.2.1
+    * Bug fix for socket not closed if HTTP request is redirected.
