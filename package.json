@@ -1,6 +1,6 @@
 {
   "name": "pimatic-probe",
-  "description": "A pimatic plugin to probe HTTP(S), TCP services",
+  "description": "A pimatic plugin to probe HTTP(S) and TCP services",
   "author": {
     "name": "Marcus Wittig",
     "url": "https://github.com/mwittig/pimatic-probe"
@@ -13,7 +13,7 @@
     "LICENSE",
     "README.md"
   ],
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/mwittig/pimatic-probe",
   "keywords": [
     "pimatic",
