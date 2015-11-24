@@ -116,9 +116,13 @@ module.exports = (env) ->
           timeEnd = process.hrtime(timeStart)
           time = (timeEnd[0] * 1e9 + timeEnd[1]) / 1e6
           @_setResponseTime(Number time.toFixed())
-          #env.logger.debug "Got response, device id=#{@id}, status=#{response.statusCode}, time="\
-          #    + "#{@responseTime} ms" if @debug
-          response.socket.end();
+          env.logger.debug "Got response, device id=#{@id}, status=#{response.statusCode}, time="\
+              + "#{@responseTime} ms" if @debug
+
+          if response.socket?
+            response.socket.end();
+            response.socket.destroy();
+
           if 0 in @acceptedStatusCodes or response.statusCode in @acceptedStatusCodes
             resolve(@responseTime)
           else
