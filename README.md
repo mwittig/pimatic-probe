@@ -189,52 +189,14 @@ If you wish to hide the sparkline (the mini-graph) of `connectTime` attribute di
         ]
     }
 
-## History
+# History
 
-* 20150419, V0.0.1
-    * Initial Version
-* 20150419, V0.0.2
-    * Fixed HTTP request termination to make sure HTTP connection gets closed right away
-    * Added optional ``responseTime`` attribute
-    * Updated README   
-* 20150420, V0.0.3
-    * Added TcpConnectProbe
-    * Corrected definition of the responseTime attribute of HttpProbe
-    * Updated README 
-* 20150421, V0.0.4
-    * Fixed bug: Type reference error occurred in TcpProbe if name resolution failed
-    * Added support for automatic HTTP/HTTPS redirection
-    * Added support for HTTP Basic Auth
-    * Added support for defining the accepted HTTP Response Status Codes
-    * Updated README, Added version badge
-* 20150424, V0.0.5
-    * Fixed bug: "Protocol:https: not supported"
-    * Fixed issue with web server using an untrusted certificate resulting in an "UNABLE_TO_VERIFY_LEAF_SIGNATURE" 
-      error. Untrusted cert will be accepted for now. This feature will be configurable with the next release.
-* 20150427, V0.0.6
-    * Reduced error log output. If "debug" is not set on the plugin, only new error states will be logged
-* 20150427, V0.0.7
-    * Fixed device config schema. Presence conditions should now match properly as part of rules.
-* 20150430, V0.0.8
-    * Added support for xAttributeOptions property as part of the device configuration
-    * Added `verifyPeerCert` property to HttpProbe device configuration to enable or disable certificate verification
-      (disabled by default). This is to replace the temporary fix for the "UNABLE_TO_VERIFY_LEAF_SIGNATURE" issue
-      added in v0.0.5
-    * Extended documentation of device configuration option
-* 20150604, V0.0.9
-    * Added range checks for interval property. Updated device schema
-    * Added HttpProbe & TcpProve socket timeouts. Adapt timeout to interval if interval is less than 20 secs
-    * Disabled HttpProbe socket pooling
-* 20150813, V0.1.0
-    * Revised license information to provide a SPDX 2.0 license identifier according to npm v2.1 guidelines 
-      on license metadata - see also https://github.com/npm/npm/releases/tag/v2.10.0
-    * Dependency updates
-* 20150918, V0.1.1
-    * Dependency updates
-    * Minor changes
-* 20151116, V0.2.0
-    * Changed strategy for probe scheduling to ensure there is only one pending probe at a time to avoid 
-      resource exhaustion in edge cases, e.g. if there is no response from peer on HTTP connect.
-    * Minor changes
-* 20151121, V0.2.1
-    * Bug fix for socket not closed if HTTP request is redirected.
+See [Release History}(https://github.com/mwittig/pimatic-probe/blob/master/HISTORY.md).
+
+# License 
+
+Copyright (c) 2015-2016, Marcus Wittig and contributors.
+All rights reserved.
+
+License: [GPL-2.0](https://github.com/mwittig/pimatic-probe/blob/master/LICENSE).
+

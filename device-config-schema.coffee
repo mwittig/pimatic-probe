@@ -10,7 +10,7 @@ module.exports = {
         description: "HTTP/HTTPS Service URL to be probed"
         type: "string"
       verifyPeerCert:
-        description: "Enables or Disables verification verification of the peer certificates."
+        description: "Enables or Disables verification of the peer certificates."
         type: "boolean"
         default: false
       enableResponseTime:

@@ -11,6 +11,7 @@
     "probe-config-schema.coffee",
     "device-config-schema.coffee",
     "LICENSE",
+    "HISTORY.md",
     "README.md"
   ],
   "version": "0.2.2",
