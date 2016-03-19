@@ -25,6 +25,8 @@ module.exports = {
         description: "HTTP Status Codes regarded as a successful probe result (set 0 for 'Accept All')"
         type: "array"
         default: [0]
+        items:
+          type: "number"
       maxRedirects:
         description: "Maximum number of HTTP redirects to follow automatically (set 0 to disable)"
         type: "number"
