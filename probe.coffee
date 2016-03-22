@@ -40,25 +40,25 @@ module.exports = (env) ->
     constructor: (@config, plugin, lastState) ->
       @debug = plugin.config.debug
       env.logger.debug("HttpProbeDevice Initialization") if @debug
-      @id = config.id
-      @name = config.name
+      @id = @config.id
+      @name = @config.name
       @responseTime = lastState?.responseTime?.value or 0
       @_presence = lastState?.presence?.value or false
-      @_options = url.parse(config.url, false, true)
+      @_options = url.parse(@config.url, false, true)
       @_lastError = ""
 
-      if config.maxRedirects > 0
-        @_options.maxRedirects = config.maxRedirects
+      if @config.maxRedirects > 0
+        @_options.maxRedirects = @config.maxRedirects
         @_service = if @_options.protocol is 'https:' then redirect.https else redirect.http
       else
         @_service = if @_options.protocol is 'https:' then https else http
 
-      @_options.rejectUnauthorized = config.verifyPeerCert
-      @acceptedStatusCodes = if _.isArray(config.acceptedStatusCodes) then config.acceptedStatusCodes else []
-      if config.username isnt "" and config.password isnt ""
-        @_options.auth = config.username + ':' + config.password
+      @_options.rejectUnauthorized = @config.verifyPeerCert
+      @acceptedStatusCodes = if _.isArray(@config.acceptedStatusCodes) then @config.acceptedStatusCodes else []
+      if @config.username isnt "" and @config.password isnt ""
+        @_options.auth = @config.username + ':' + @config.password
 
-      if config.enableResponseTime
+      if @config.enableResponseTime
         @addAttribute('responseTime', {
           description: "HTTP/HTTPS Response Time",
           type: "number"
@@ -71,7 +71,7 @@ module.exports = (env) ->
         env.logger.error("URL must contain a hostname")
         @deviceConfigurationError = true
 
-      @interval = Math.max 1000 * config.interval, 10000
+      @interval = Math.max 1000 * @config.interval, 10000
       @_options.timeout = Math.min @interval, 20000
       @_options.agent = false
       super()
@@ -157,15 +157,15 @@ module.exports = (env) ->
     constructor: (@config, plugin, lastState) ->
       @debug = plugin.config.debug
       env.logger.debug("TcpConnectProbeDevice Initialization") if @debug
-      @id = config.id
-      @name = config.name
+      @id = @config.id
+      @name = @config.name
       @connectTime = lastState?.connectTime?.value or 0
       @_presence = lastState?.presence?.value or false
-      @_port = config.port
-      @interval = Math.max 1000 * config.interval, 10000
-      @_connectTimeout = Math.min @interval, config.timeout * 1000
+      @_port = @config.port
+      @interval = Math.max 1000 * @config.interval, 10000
+      @_connectTimeout = Math.min @interval, @config.timeout * 1000
 
-      if config.enableConnectTime
+      if @config.enableConnectTime
         @addAttribute('connectTime', {
           description: "TCP Connect Time",
           type: "number"
@@ -176,9 +176,9 @@ module.exports = (env) ->
 
       super()
 
-      dns.lookup(config.host, null, (error, address) =>
+      dns.lookup(@config.host, null, (error, address) =>
         if error?
-          env.logger.error "Probe for device id=#{@id}. host=#{config.host}: Name Lookup failed: " + error
+          env.logger.error "Probe for device id=#{@id}. host=#{@config.host}: Name Lookup failed: " + error
         else
           @_host = address
           # perform an update now

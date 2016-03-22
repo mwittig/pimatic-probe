@@ -53,3 +53,6 @@
     * Fixed config schema type definition for `acceptedStatusCodes`, thanks @sweetpi
     * Fixed typo in config schema description for `verifyPeerCert`
     * Added license info to README
+* 20160322, V0.2.4
+    * Fixed compatibility issue with Coffeescript 1.9 as required for pimatic 0.9 (thanks @sweebee)
+    * Updated peerDependencies property for compatibility with pimatic 0.9
