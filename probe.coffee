@@ -2,18 +2,15 @@
 
 module.exports = (env) ->
 
-  # Require the bluebird promise library
   Promise = env.require 'bluebird'
   _ = env.require 'lodash'
-
-  # Require the nodejs net API
   net = require 'net'
-
   dns = require 'dns'
   url = require 'url'
   http = require 'http'
   https = require 'https'
   redirect = require 'follow-redirects'
+  commons = require('pimatic-plugin-commons')(env)
 
   # ###ProbePlugin class
   class ProbePlugin extends env.plugins.Plugin
@@ -38,14 +35,14 @@ module.exports = (env) ->
   class HttpProbeDevice extends env.devices.PresenceSensor
     # Initialize device by reading entity definition from middleware
     constructor: (@config, plugin, lastState) ->
-      @debug = plugin.config.debug
-      env.logger.debug("HttpProbeDevice Initialization") if @debug
+      @base = commons.base @, @config.class
+      @debug = plugin.config.debug || false
       @id = @config.id
       @name = @config.name
+      @base.debug "Initialization"
       @responseTime = lastState?.responseTime?.value or 0
       @_presence = lastState?.presence?.value or false
       @_options = url.parse(@config.url, false, true)
-      @_lastError = ""
 
       if @config.maxRedirects > 0
         @_options.maxRedirects = @config.maxRedirects
@@ -80,32 +77,19 @@ module.exports = (env) ->
         # perform an update now
         @_requestUpdate()
 
-
-    # poll device according to interval
-    _scheduleUpdate: () ->
-      if @timeoutObject?
-        clearTimeout @timeoutObject
-
-      if @interval > 0
-        # keep updating
-        @timeoutObject = setTimeout( =>
-          @timeoutObject = null
-          @_requestUpdate()
-        , @interval
-        )
-
+    destroy: () ->
+      @base.cancelUpdate()
+      super()
 
     _requestUpdate: ->
-      @_ping().then(=>
-        @_lastError = ""
-        @_setPresence (yes)
+      @_ping().then( =>
+        @base.resetLastError()
+        @_setPresence yes
       ).catch((error) =>
-        newError = "Probe for device id=#{@id} failed: " + error
-        env.logger.error newError if @_lastError isnt newError or @debug
-        @_lastError = newError
-        @_setPresence (no)
+        @base.error "Probe url=#{@config.url} failed: " + error
+        @_setPresence no
       ).finally( =>
-        @_scheduleUpdate()
+        @base.scheduleUpdate @_requestUpdate, @interval
       )
 
     _ping: ->
@@ -116,8 +100,7 @@ module.exports = (env) ->
           timeEnd = process.hrtime(timeStart)
           time = (timeEnd[0] * 1e9 + timeEnd[1]) / 1e6
           @_setResponseTime(Number time.toFixed())
-          env.logger.debug "Got response, device id=#{@id}, status=#{response.statusCode}, time="\
-              + "#{@responseTime} ms" if @debug
+          @base.debug "Response, status=#{response.statusCode}, time=#{@responseTime}ms"
 
           if response.socket?
             response.socket.end();
@@ -126,8 +109,8 @@ module.exports = (env) ->
           if 0 in @acceptedStatusCodes or response.statusCode in @acceptedStatusCodes
             resolve(@responseTime)
           else
-            reject(new Error "HTTP status code #{response.statusCode} does not match accepted status codes "\
-                + @acceptedStatusCodes.toString())
+            reject(new Error "HTTP status code #{response.statusCode} does not match "\
+                + "accepted status codes #{@acceptedStatusCodes.toString()}")
         )
         request.on "error", ((error) =>
           if (timeoutOccurred)
@@ -155,10 +138,12 @@ module.exports = (env) ->
   class TcpConnectProbeDevice extends env.devices.PresenceSensor
     # Initialize device by reading entity definition from middleware
     constructor: (@config, plugin, lastState) ->
+      @base = commons.base @, @config.class
       @debug = plugin.config.debug
-      env.logger.debug("TcpConnectProbeDevice Initialization") if @debug
       @id = @config.id
       @name = @config.name
+      @base.debug("Initialization")
+
       @connectTime = lastState?.connectTime?.value or 0
       @_presence = lastState?.presence?.value or false
       @_port = @config.port
@@ -173,42 +158,30 @@ module.exports = (env) ->
           unit: " ms"
         })
         @['getConnectTime'] = ()-> Promise.resolve(@connectTime)
-
       super()
 
       dns.lookup(@config.host, null, (error, address) =>
         if error?
-          env.logger.error "Probe for device id=#{@id}. host=#{@config.host}: Name Lookup failed: " + error
+          @base.error "host=#{@config.host}: Name Lookup failed: " + error
         else
           @_host = address
           # perform an update now
           @_requestUpdate()
       )
 
-
-    # poll device according to interval
-    _scheduleUpdate: () ->
-      if @timeoutObject?
-        clearTimeout @timeoutObject
-
-      if @interval > 0
-        # keep updating
-        @timeoutObject = setTimeout( =>
-          @timeoutObject = null
-          @_requestUpdate()
-        , @interval
-        )
+    destroy: () ->
+      @base.cancelUpdate()
+      super()
 
     _requestUpdate: ->
-      @_connect().then(=>
-        @_setPresence (yes)
+      @_connect().then( =>
+        @base.resetLastError()
+        @_setPresence yes
       ).catch((error) =>
-        newError = "Probe for device id=#{@id}, host=#{@_host}, port=#{@_port} failed: " + error
-        env.logger.error newError if @_lastError isnt newError or @debug
-        @_lastError = newError
-        @_setPresence (no)
+        @base.error "Probe host=#{@_host}, port=#{@_port} failed: " + error
+        @_setPresence no
       ).finally( =>
-        @_scheduleUpdate()
+        @base.scheduleUpdate @_requestUpdate, @interval
       )
 
     _connect: ->
@@ -221,15 +194,15 @@ module.exports = (env) ->
         )
         client.on "error", ((error) =>
           client.destroy()
-          reject(error)
+          reject error
         )
         client.connect(@_port, @_host, =>
           timeEnd = process.hrtime(timeStart)
           time = (timeEnd[0] * 1e9 + timeEnd[1]) / 1e6
           @_setConnectTime(Number time.toFixed())
           client.destroy()
-          env.logger.debug "Connected to server, device id=#{@id}, connectTime=#{@connectTime} ms" if @debug
-          resolve(@connectTime)
+          @base.debug "Connected to server, connectTime=#{@connectTime} ms"
+          resolve @connectTime
         )
       )
 
