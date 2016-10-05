@@ -1,5 +1,7 @@
 # Release History
 
+* 20161006, V0.2.6
+    * Updated dependencies to pimatic-plugin-commons@0.9.3
 * 20160426, V0.2.5
     * Added destroy method to cancel an scheduled update when the device is removed or updated
     * Updated dependencies to follow-redirects@0.1.0
