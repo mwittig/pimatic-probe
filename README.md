@@ -1,6 +1,7 @@
 # pimatic-probe
 
 [![npm version](https://badge.fury.io/js/pimatic-probe.svg)](http://badge.fury.io/js/pimatic-probe)
+[![Build Status](https://travis-ci.org/mwittig/pimatic-probe.svg?branch=master)](https://travis-ci.org/mwittig/pimatic-probe)
 
 A pimatic plugin to probe HTTP(S) and TCP services.
 
@@ -13,7 +14,7 @@ your contribution to start with. If you like this plugin, please consider &#x260
 ## Configuration
 
 Note, instead of editing `config.json` as suggested in the remainder it is easier to use the plugin and device 
-configuration editors provided as part of web frontend for pimatic 0.9.
+configuration editors provided as part of the web frontend for pimatic 0.9.
 
 You can load the plugin by editing your `config.json` to include the following in the `plugins` section. For debugging 
 purposes you may set property `debug` to `true`. This will write additional debug messages to the pimatic log. 
