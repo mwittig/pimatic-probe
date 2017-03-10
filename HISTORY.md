@@ -1,5 +1,10 @@
 # Release History
 
+* 20170310, V0.2.7
+    * Updated dependencies to follow-redirects@1.2.3
+    * Removed support for Node.js 0.10
+    * Revised README
+    * Added travis build descriptor
 * 20161006, V0.2.6
     * Updated dependencies to pimatic-plugin-commons@0.9.3
 * 20160426, V0.2.5
