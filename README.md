@@ -4,7 +4,16 @@
 
 A pimatic plugin to probe HTTP(S) and TCP services.
 
+## Contributions
+
+Contributions to the project are  welcome. You can simply fork the project and create a pull request with 
+your contribution to start with. If you like this plugin, please consider &#x2605; starring 
+[the project on github](https://github.com/mwittig/pimatic-probe).
+
 ## Configuration
+
+Note, instead of editing `config.json` as suggested in the remainder it is easier to use the plugin and device 
+configuration editors provided as part of web frontend for pimatic 0.9.
 
 You can load the plugin by editing your `config.json` to include the following in the `plugins` section. For debugging 
 purposes you may set property `debug` to `true`. This will write additional debug messages to the pimatic log. 
@@ -168,7 +177,7 @@ As part of the device definition you need to provide the `host` and `port`for th
 #### xLink and xAttributeOptions properties
 
 If you wish to hide the sparkline (the mini-graph) of `connectTime` attribute display this is possible with 
- pimatic v0.8.68 and higher using the  `xAttributeOptions` property as shown in the following example. Using the 
+ pimatic v0.8.68 and higher using the `xAttributeOptions` property as shown in the following example. Using the 
  `xLink` property you can also add a hyperlink to the device display.
  
     {
@@ -195,7 +204,7 @@ See [Release History}(https://github.com/mwittig/pimatic-probe/blob/master/HISTO
 
 # License 
 
-Copyright (c) 2015-2016, Marcus Wittig and contributors.
+Copyright (c) 2015-2017, Marcus Wittig and contributors.
 All rights reserved.
 
 License: [GPL-2.0](https://github.com/mwittig/pimatic-probe/blob/master/LICENSE).
