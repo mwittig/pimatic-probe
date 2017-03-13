@@ -201,7 +201,7 @@ If you wish to hide the sparkline (the mini-graph) of `connectTime` attribute di
 
 # History
 
-See [Release History}(https://github.com/mwittig/pimatic-probe/blob/master/HISTORY.md).
+See [Release History](https://github.com/mwittig/pimatic-probe/blob/master/HISTORY.md).
 
 # License 
 
