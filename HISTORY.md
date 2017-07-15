@@ -1,5 +1,7 @@
 # Release History
 
+* 20170715, V0.3.1
+    * Removed extra space from unit value
 * 20170715, V0.3.0
     * Conditionally add getter actions for responseTime and connectTime if supported by pimatic (>= 0.9.41)
     * Updated dependencies to follow-redirects@1.2.4 and pimatic-plugin-commons@0.9.5
