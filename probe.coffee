@@ -60,7 +60,7 @@ module.exports = (env) ->
           description: "HTTP/HTTPS Response Time",
           type: "number"
           acronym: "RT"
-          unit: " ms"
+          unit: "ms"
         })
         @addAction('getResponseTime'
           description: 'Returns the last HTTP/HTTPS Response Time',
@@ -68,7 +68,7 @@ module.exports = (env) ->
             responseTime:
               type: "number"
               acronym: "RT"
-              unit: " ms"
+              unit: "ms"
         ) if @addAction?
         @['getResponseTime'] = ()-> Promise.resolve(@responseTime)
 
@@ -108,7 +108,7 @@ module.exports = (env) ->
           timeEnd = process.hrtime(timeStart)
           time = (timeEnd[0] * 1e9 + timeEnd[1]) / 1e6
           @_setResponseTime(Number time.toFixed())
-          @base.debug "Response, status=#{response.statusCode}, time=#{@responseTime}ms"
+          @base.debug "Response, status=#{response.statusCode}, time=#{@responseTime} ms"
 
           if response.socket?
             response.socket.end();
@@ -163,7 +163,7 @@ module.exports = (env) ->
           description: "TCP Connect Time"
           type: "number"
           acronym: "CT"
-          unit: " ms"
+          unit: "ms"
         )
         @addAction('getConnectTime'
           description: 'Returns the last TCP Connect Time'
@@ -171,7 +171,7 @@ module.exports = (env) ->
             connectTime:
               type: "number"
               acronym: "CT"
-              unit: " ms"
+              unit: "ms"
         ) if @addAction?
         @['getConnectTime'] = ()-> Promise.resolve(@connectTime)
       super()
