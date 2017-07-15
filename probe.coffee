@@ -62,6 +62,14 @@ module.exports = (env) ->
           acronym: "RT"
           unit: " ms"
         })
+        @addAction('getResponseTime'
+          description: 'Returns the last HTTP/HTTPS Response Time',
+          returns:
+            responseTime:
+              type: "number"
+              acronym: "RT"
+              unit: " ms"
+        ) if @addAction?
         @['getResponseTime'] = ()-> Promise.resolve(@responseTime)
 
       if !@_options.hostname?
@@ -151,12 +159,20 @@ module.exports = (env) ->
       @_connectTimeout = Math.min @interval, @config.timeout * 1000
 
       if @config.enableConnectTime
-        @addAttribute('connectTime', {
-          description: "TCP Connect Time",
+        @addAttribute('connectTime',
+          description: "TCP Connect Time"
           type: "number"
           acronym: "CT"
           unit: " ms"
-        })
+        )
+        @addAction('getConnectTime'
+          description: 'Returns the last TCP Connect Time'
+          returns:
+            connectTime:
+              type: "number"
+              acronym: "CT"
+              unit: " ms"
+        ) if @addAction?
         @['getConnectTime'] = ()-> Promise.resolve(@connectTime)
       super()
 
