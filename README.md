@@ -1,5 +1,7 @@
 # pimatic-probe
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mwittig/pimatic-probe.svg)](https://greenkeeper.io/)
+
 [![npm version](https://badge.fury.io/js/pimatic-probe.svg)](http://badge.fury.io/js/pimatic-probe)
 [![Build Status](https://travis-ci.org/mwittig/pimatic-probe.svg?branch=master)](https://travis-ci.org/mwittig/pimatic-probe)
 
