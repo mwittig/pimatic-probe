@@ -21,13 +21,13 @@ module.exports = (env) ->
 
       @framework.deviceManager.registerDeviceClass("HttpProbe", {
         configDef: deviceConfigDef.HttpProbe,
-        createCallback: (config, plugin, lastState) =>
+        createCallback: (config, lastState) =>
           return new HttpProbeDevice(config, @, lastState)
       })
 
       @framework.deviceManager.registerDeviceClass("TcpConnectProbe", {
         configDef: deviceConfigDef.TcpConnectProbe,
-        createCallback: (config, plugin, lastState) =>
+        createCallback: (config, lastState) =>
           return new TcpConnectProbeDevice(config, @, lastState)
       })
 
