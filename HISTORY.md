@@ -1,5 +1,8 @@
 # Release History
 
+* 20171204, V0.3.2
+    * Fixed wrong signature for createCallback hooks which caused invalid lastState, issue #17
+    * Updated dependencies to follow-redirects@1.2.6
 * 20170715, V0.3.1
     * Removed extra space from unit value
 * 20170715, V0.3.0
