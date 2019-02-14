@@ -43,6 +43,12 @@ module.exports = (env) ->
       @responseTime = lastState?.responseTime?.value or 0
       @_presence = lastState?.presence?.value or false
       @_options = url.parse(@config.url, false, true)
+      if @config.probeErrorLogLevel in ["error", "warn", "info"]
+        @_level = @config.probeErrorLogLevel
+      else
+        @base.error("Bad device configuration: probeErrorLogLevel must be one of [\"error\", \"warn\", \"info\"]")
+        @_level = "error"
+
 
       if @config.maxRedirects > 0
         @_options.maxRedirects = @config.maxRedirects
@@ -94,7 +100,7 @@ module.exports = (env) ->
         @base.resetLastError()
         @_setPresence yes
       ).catch((error) =>
-        @base.error "Probe url=#{@config.url} failed: " + error
+        @base.logErrorWithLevel @_level, "Probe url=#{@config.url} failed: " + error
         @_setPresence no
       ).finally( =>
         @base.scheduleUpdate @_requestUpdate, @interval
@@ -157,6 +163,11 @@ module.exports = (env) ->
       @_port = @config.port
       @interval = Math.max 1000 * @config.interval, 10000
       @_connectTimeout = Math.min @interval, @config.timeout * 1000
+      if @config.probeErrorLogLevel in ["error", "warn", "info"]
+        @_level = @config.probeErrorLogLevel
+      else
+        @base.error("Bad device configuration: probeErrorLogLevel must be one of [\"error\", \"warn\", \"info\"]")
+        @_level = "error"
 
       if @config.enableConnectTime
         @addAttribute('connectTime',
@@ -194,7 +205,7 @@ module.exports = (env) ->
         @base.resetLastError()
         @_setPresence yes
       ).catch((error) =>
-        @base.error "Probe host=#{@_host}, port=#{@_port} failed: " + error
+        @base.logErrorWithLevel @_level, "Probe host=#{@_host}, port=#{@_port} failed: " + error
         @_setPresence no
       ).finally( =>
         @base.scheduleUpdate @_requestUpdate, @interval

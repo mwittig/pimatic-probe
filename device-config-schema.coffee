@@ -39,6 +39,10 @@ module.exports = {
         description: "Password if HTTP Basic Authentication shall be applied"
         type: "string"
         default: ""
+      probeErrorLogLevel:
+        description: "Log level used for reporting probe errors"
+        enum: ["error", "warn", "info"]
+        default: "error"
   },
   TcpConnectProbe: {
     title: "TCP Connect Probe"
@@ -64,5 +68,9 @@ module.exports = {
         description: "Timeout (in seconds) of inactivity on the TCP socket"
         type: "number"
         default: 10
+      probeErrorLogLevel:
+        description: "Log level used for reporting probe errors"
+        enum: ["error", "warn", "info"]
+        default: "error"
   }
 }
