@@ -1,5 +1,8 @@
 # Release History
 
+* 20190214, V0.3.3
+    * Added device configuration option to set the log level used for reporting probe errors, issue #19
+    * Updated dependencies to follow-redirects@1.7.0 and pimatic-plugin-commons@0.9.10
 * 20171204, V0.3.2
     * Fixed wrong signature for createCallback hooks which caused invalid lastState, issue #17
     * Updated dependencies to follow-redirects@1.2.6
