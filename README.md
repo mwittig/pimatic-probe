@@ -205,7 +205,7 @@ See [Release History](https://github.com/mwittig/pimatic-probe/blob/master/HISTO
 
 # License 
 
-Copyright (c) 2015-2017, Marcus Wittig and contributors.
+Copyright (c) 2015-2019, Marcus Wittig and contributors.
 All rights reserved.
 
 License: [GPL-2.0](https://github.com/mwittig/pimatic-probe/blob/master/LICENSE).
