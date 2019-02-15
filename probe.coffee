@@ -190,6 +190,7 @@ module.exports = (env) ->
       dns.lookup(@config.host, null, (error, address) =>
         if error?
           @base.error "host=#{@config.host}: Name Lookup failed: " + error
+          @_setPresence no
         else
           @_host = address
           # perform an update now
