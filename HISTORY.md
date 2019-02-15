@@ -1,5 +1,7 @@
 # Release History
 
+* 20190215, V0.3.4
+    * Fix set tcp-probe presence to absent if DNS look fails
 * 20190214, V0.3.3
     * Added device configuration option to set the log level used for reporting probe errors, issue #19
     * Updated dependencies to follow-redirects@1.7.0 and pimatic-plugin-commons@0.9.10
