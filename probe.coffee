@@ -46,7 +46,8 @@ module.exports = (env) ->
       if @config.probeErrorLogLevel in ["error", "warn", "info"]
         @_level = @config.probeErrorLogLevel
       else
-        @base.error("Bad device configuration: probeErrorLogLevel must be one of [\"error\", \"warn\", \"info\"]")
+        @base.error("Bad device configuration: probeErrorLogLevel " +
+          "must be one of [\"error\", \"warn\", \"info\"]")
         @_level = "error"
 
 
@@ -57,7 +58,10 @@ module.exports = (env) ->
         @_service = if @_options.protocol is 'https:' then https else http
 
       @_options.rejectUnauthorized = @config.verifyPeerCert
-      @acceptedStatusCodes = if _.isArray(@config.acceptedStatusCodes) then @config.acceptedStatusCodes else []
+      if _.isArray(@config.acceptedStatusCodes)
+        @acceptedStatusCodes = @config.acceptedStatusCodes
+      else
+        @acceptedStatusCodes = []
       if @config.username isnt "" and @config.password isnt ""
         @_options.auth = @config.username + ':' + @config.password
 
@@ -117,8 +121,8 @@ module.exports = (env) ->
           @base.debug "Response, status=#{response.statusCode}, time=#{@responseTime} ms"
 
           if response.socket?
-            response.socket.end();
-            response.socket.destroy();
+            response.socket.end()
+            response.socket.destroy()
 
           if 0 in @acceptedStatusCodes or response.statusCode in @acceptedStatusCodes
             resolve(@responseTime)
