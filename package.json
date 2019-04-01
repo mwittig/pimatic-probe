@@ -18,9 +18,10 @@
   "homepage": "https://github.com/mwittig/pimatic-probe",
   "keywords": [
     "pimatic",
+    "pimatic-plugin",
     "http-ping",
-    "ping",
-    "probe"
+    "tcp-ping",
+    "port-probing"
   ],
   "repository": {
     "type": "git",
