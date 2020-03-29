@@ -33,7 +33,7 @@
   "license": "GPL-2.0",
   "configSchema": "probe-config-schema.coffee",
   "dependencies": {
-    "follow-redirects": "^1.7.0",
+    "follow-redirects": "^1.11.0",
     "pimatic-plugin-commons": "^0.9.10"
   },
   "peerDependencies": {
